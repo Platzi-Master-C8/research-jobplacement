@@ -1,6 +1,3 @@
-# Request
-import requests
-
 # Pandas
 import pandas as pd
 
@@ -10,9 +7,6 @@ import asyncio
 
 # PyYaml
 import yaml
-
-# Python
-from time import sleep
 
 # Pyppeteer
 from pyppeteer import launch

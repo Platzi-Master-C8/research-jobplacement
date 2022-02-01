@@ -4,6 +4,7 @@ pyppeteer==1.0.2
 nest_asyncio==1.5.4
 asyncio==3.4.3
 pandas==1.4.0
+requests==2.27.1
 
 # DataBase
 SQLAlchemy==1.4.31
