@@ -30,7 +30,7 @@ def extract_text_from_html(column_to_clean: str) -> str:
     :param column_to_clean: column to clean
     :return: column with the text
     """
-    text = BeautifulSoup(column_to_clean).get_text()
+    text = BeautifulSoup(column_to_clean, features='html.parser').get_text()
     return text
 
 

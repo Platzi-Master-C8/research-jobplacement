@@ -1,0 +1,16 @@
+job_sites:
+  comparably:
+    url: https://www.comparably.com/companies
+    queries:
+      companies_links: 'document.getElementsByClassName("companyList")[0].innerHTML'
+      company_name: 'document.getElementsByClassName("companyName")[0].innerText'
+      employee_participants: 'document.getElementsByClassName("js-participantsCount")[0].innerText'
+      total_ratings: 'document.getElementsByClassName("js-ratingsCount")[0].innerText'
+      culture_score: 'document.getElementsByClassName("starLabel")[0].innerText'
+      ceo_name: 'document.getElementsByClassName("ceoName")[0].innerText'
+      ceo_score: 'document.getElementsByClassName("numberGrade")[0].innerText'
+      score_positive_reviews: 'document.getElementsByClassName("horizontal-bar-percent")[0].innerText'
+      score_negative_reviews: 'document.getElementsByClassName("horizontal-bar-percent")[1].innerText'
+      company_description: 'document.getElementsByClassName("section-text")[1].innerText'
+      company_website: 'document.getElementsByClassName("cppAbout")[0].children[0].children[1].children[0].children[2].children[1].innerText'
+      about_url: 'document.getElementsByClassName("dropdownMenu")[3].children[1].children[1].children[0].lastChild.href'
