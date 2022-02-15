@@ -22,8 +22,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     pipelines = [
-        # GetOnBoardPipeline(),
-        # ComparablyPipeline(),
+        GetOnBoardPipeline(),
+        ComparablyPipeline(),
         RemoteokPipeline(),
     ]
     for pipeline in pipelines:

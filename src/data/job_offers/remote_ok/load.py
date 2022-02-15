@@ -175,47 +175,12 @@ class Load():
         registered['remote'] = registered['remote'].astype('str')
         registered['salary'] = registered['salary'].astype('float64')
         
-        news = df[~df.isin(registered)]
-
-        df['key'] = (df['position_title'].astype('str') +
-            df['position_category_id'].astype('str') +
-            df['seniority_id'].astype('str') +
-            df['modality'].astype('str') +
-            df['date_position'].astype('str') +
-            df['activate'].astype('str') +
-            df['num_offers'].astype('str') +
-            df['salary_min'].astype('str') +
-            df['salary_max'].astype('str') +
-            df['salary'].astype('str') +
-            df['currency_id'].astype('str') +
-            df['remote'].astype('str') +
-            df['location_id'].astype('str') +
-            df['english'].astype('str') +
-            df['english_level'].astype('str') +
-            df['position_url'].astype('str') +
-            df['company_id'].astype('str'))
-        
-        registered['key'] = (df['position_title'].astype('str') +
-            df['position_category_id'].astype('str') +
-            df['seniority_id'].astype('str') +
-            df['modality'].astype('str') +
-            df['date_position'].astype('str') +
-            df['activate'].astype('str') +
-            df['num_offers'].astype('str') +
-            df['salary_min'].astype('str') +
-            df['salary_max'].astype('str') +
-            df['salary'].astype('str') +
-            df['currency_id'].astype('str') +
-            df['remote'].astype('str') +
-            df['location_id'].astype('str') +
-            df['english'].astype('str') +
-            df['english_level'].astype('str') +
-            df['position_url'].astype('str') +
-            df['company_id'].astype('str') )
-
-        news = df[~df['key'].isin(registered['key'])]
-        news = news.drop(['key'],axis=1)
-        # print(df[df['key'].isin(registered['key'])])
+        reg = list(registered['position_url'])
+        dfs = list(df['position_url'])
+        new_cats = pd.DataFrame(
+            {'position_url': list(set(dfs) - set(reg))})
+        news = df[df['position_url'].isin(new_cats['position_url'])]
+        news = news.drop_duplicates()
 
         if news.empty:
             print('No existen registros nuevos para position')
@@ -228,7 +193,7 @@ class Load():
 
         registered = self.get_data(
             'position', con).drop(
-            ['uid'], axis=1)
+            ['uid'], axis=1).drop_duplicates()
 
         return df2, registered
 
@@ -263,18 +228,11 @@ class Load():
         # keys['english'] = keys['english'].astype('str')
         keys['remote'] = keys['remote'].astype('str')
         keys['salary'] = keys['salary'].astype('float64')
-        
         df2 = df.merge(keys, how='left', on=[
-            'position_title', 'position_category_id',
-            'seniority_id', 'modality',
-            'date_position', 'activate', 'num_offers',
-            'salary_min', 'salary_max', 'salary',
-            'currency_id', 'remote', 'location_id',
-            'english', 'english_level', 'position_url',
-            'company_id'])
-
+            'position_title','date_position',
+             'position_url'
+            ])
         df2 = df2[['id_position', 'skill']]
-        
         df2['skill'] = [x.replace('[', '').replace(']', '').replace(
             "'", '').strip().split(', ') for x in df2['skill']]
 
@@ -294,17 +252,26 @@ class Load():
 
         registered = self.get_data('position_skill', con).drop(
             ['id_position_skill'], axis=1)
-        # print(df.columns)
-        df2['key'] = df2['position_id'].astype('str') + df2['skill_id'].astype('str')
-        registered['key'] = registered['position_id'].astype('str') + registered['skill_id'].astype('str')
-        news = df2[~df2['key'].isin(registered['key'])]
-        news = news.drop(['key'], axis = 1)
+
         skl_id = list(skill_['id_skill'])
         skl_nm = list(skill_['skill'])
 
         for x in range(len(skl_id)):
-            news['skill_id'] = news['skill_id'].replace(
+            df2['skill_id'] = df2['skill_id'].replace(
                 skl_nm[x], skl_id[x])
+
+
+        df2['key'] = df2['position_id'].astype('str') + df2['skill_id'].astype('str')
+        registered['key'] = registered['position_id'].astype('str') + registered['skill_id'].astype('str')
+
+        reg = list(registered['key'])
+        dfs = list(df2['key'])
+
+        new_cats = pd.DataFrame(
+            {'key': list(set(dfs) - set(reg))})
+
+        news = df2[df2['key'].isin(new_cats['key'])]
+        news = news.drop(['key'], axis = 1)
                 
         news = news.fillna(1)
 
