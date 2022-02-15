@@ -1,0 +1,14 @@
+newoffers:
+  remoteok:
+    url: https://remoteok.com
+    queries:
+      position_name: 'h2[itemprop=title]'
+      enterprise_name: 'h3[itemprop=name]'
+      position_name: 'h2[itemprop=title]'
+      publish_date: 'time'
+      offer_url: 'a[itemprop=url]'
+      description: 'div.description'
+      location_salary: 'div.location'
+      description: 'div.description'
+      skills_container: 'td.tags'
+      skills: 'div[rel=follow]'
