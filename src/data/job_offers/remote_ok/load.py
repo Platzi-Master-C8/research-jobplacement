@@ -5,8 +5,8 @@ import pandas as pd
 import datetime as dt
 import time
 from sqlalchemy import create_engine
-# import remoteok.load.conection as pc
-import conection as pc
+import data.job_offers.remote_ok.conection as pc
+# import conection as pc
 
 
 pd.set_option('display.max_columns', 500)
@@ -15,7 +15,7 @@ pd.set_option('display.max_columns', 500)
 class Load():
     def __init__(self) -> None:
         self.today = dt.date.today()
-        self.route = f'./remoteok/clean_data/REMOTEOK_{self.today}_offers_CLEAN.csv'
+        self.route = f'./data/processed/REMOTEOK_{self.today}_offers_CLEAN.csv'
         self.data = self.read_file(self.route)
         self.con = pc.connection_elephant()
         self.categories = self.insert_category(self.data["categories"].drop_duplicates(),

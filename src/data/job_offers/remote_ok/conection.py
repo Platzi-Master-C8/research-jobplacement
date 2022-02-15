@@ -4,13 +4,14 @@ from sqlalchemy import create_engine
 
 
 def read_env():
-    with open('./remoteok/load/env.yaml') as f:
+    with open('./src/data/job_offers/remote_ok/env.yaml') as f:
         config = yaml.safe_load(f)
     return config
 
 
 def connection():
     try:
+        
         data = read_env()
         conn_string = f'postgresql://{data["user"]}:{data["pass"]}@{data["host"]}/{data["db"]}'
         # conn_string = 'postgres://user:password@host/dbname'
@@ -29,6 +30,7 @@ def connection_elephant():
     try:
         data = read_env()
         conn_string = data["conn_string"]
+        # print(conn_string)
         db = create_engine(conn_string)
         conn = db.connect()
         # conn = psycopg2.connect(conn_string
