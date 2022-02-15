@@ -4,6 +4,8 @@ import hashlib
 
 # BeautifulSoup
 from bs4 import BeautifulSoup
+
+# Pandas
 from pandas import DataFrame
 
 
@@ -30,8 +32,10 @@ def extract_text_from_html(column_to_clean: str) -> str:
     :param column_to_clean: column to clean
     :return: column with the text
     """
-    text = BeautifulSoup(column_to_clean, features='html.parser').get_text()
-    return text
+    if type(column_to_clean) is str:
+        text = BeautifulSoup(column_to_clean, features='html.parser').get_text()
+        return text
+    return 'None'
 
 
 def generate_column_uid(df: DataFrame) -> DataFrame:

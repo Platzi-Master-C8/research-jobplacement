@@ -10,14 +10,14 @@ import pandas as pd
 from pandas import DataFrame
 
 # Utils
+from utils.interface import PipelineInterface
 from utils.log_generator import generate_log_line
 from utils.transform import (
     remove_emojis,
     extract_text_from_html,
     generate_column_uid
 )
-from utils.interface import PipelineInterface
-from utils.files import (save_data, read_data)
+from utils.files import save_data, read_data
 
 
 class GetOnBoardPipeline(PipelineInterface):

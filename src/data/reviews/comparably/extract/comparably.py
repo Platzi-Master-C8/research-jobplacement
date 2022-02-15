@@ -22,7 +22,7 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 class ComparablyWebScraping:
 
     def __init__(self):
-        self.url = 'https://www.comparably.com/companies'
+        self.url = 'https://co.indeed.com/cmp/Adobe'
         self.browser = None
         self.page = None
         self.__config = None
@@ -35,7 +35,7 @@ class ComparablyWebScraping:
         return self.__config
 
     async def get_browser(self):
-        return await launch()
+        return await launch({'devtools': True})
 
     async def close_browser(self):
         return await self.browser.close()
@@ -67,7 +67,7 @@ class ComparablyWebScraping:
     async def search_data(self, url: str) -> dict:
         config_yml = self.config()['job_sites']['comparably']['queries']
         company_info = {
-            'company_name': await self._page_evaluate(query=config_yml['company_name']),
+            'name': await self._page_evaluate(query=config_yml['company_name']),
             'ceo': await self._page_evaluate(query=config_yml['ceo_name']),
             'ceo_score': await self._page_evaluate(query=config_yml['ceo_score']),
             'employee_participants': await self._page_evaluate(query=config_yml['employee_participants']),

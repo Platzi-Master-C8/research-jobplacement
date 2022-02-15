@@ -1,0 +1,18 @@
+indeed_properties:
+  url: 'https://www.indeed.com/companies'
+  queries:
+    input_search: '#ifl-InputFormField-1'
+    button_search: '#main > div > div.css-f23u8d-Box.eu4oa1w0 > form > div > div.css-1puy0jg-Box.eu4oa1w0 > button'
+    first_result: 'document.getElementsByTagName("main")[0].children[0].children[1].children[0].children[2].children[0].children[0].children[1].children[0].children[0].href'
+    company_name: 'document.getElementsByTagName("header")[0].children[1].children[2].children[0].children[0].children[0].children[0].children[0].children[1].children[0].innerText'
+    company_overall: 'document.getElementsByTagName("header")[0].children[1].children[2].children[0].children[0].children[0].children[0].children[0].children[1].children[1].children[0].children[1].innerText'
+    total_ratings: 'document.getElementsByTagName("header")[0].children[1].children[2].children[0].children[0].children[0].children[0].children[0].children[1].children[1].children[0].children[3].content'
+    culture_score: 'document.getElementsByTagName("main")[0].children[1].children[1].children[2].children[4].children[4].children[0].children[0].innerText'
+    work_life_balance_score: 'document.getElementsByTagName("main")[0].children[1].children[1].children[2].children[4].children[0].children[0].children[0].innerText'
+    career_opportunities_score: 'document.getElementsByTagName("main")[0].children[1].children[1].children[2].children[4].children[2].children[0].children[0].innerText'
+    perks_score: 'document.getElementsByTagName("main")[0].children[1].children[1].children[2].children[4].children[1].children[0].children[0].innerText'
+    reviews: 'document.getElementsByClassName("css-5cqmw8").length'
+    review_title: 'children[1].children[1].children[0].innerText'
+    user_info: 'children[1].children[1].children[1].children[0].innerHTML'
+    content_type_length: 'children[1].children[1].children.length'
+    review_score: 'children[1].children[0].innerText'
