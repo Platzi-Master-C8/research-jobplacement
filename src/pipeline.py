@@ -10,6 +10,8 @@ from data.job_offers import (
 from data.reviews import (
     IndeedPipeline,
 )
+from data.job_offers.remote_ok.remoteok_pipeline import (
+    RemoteokPipeline,
 
 from data.companies import CompaniesGetOnBoardPipeline
 
@@ -26,7 +28,7 @@ def main():
         IndeedPipeline(),
         CompaniesGetOnBoardPipeline(),
         WeWorkRemotelyPipeline(),
-        remoteOkPipeline(),
+        RemoteokPipeline(),
     ]
     for pipeline in pipelines:
         if isinstance(pipeline, PipelineInterface):
