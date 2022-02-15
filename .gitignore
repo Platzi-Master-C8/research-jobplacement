@@ -322,3 +322,5 @@ cython_debug/
 .env
 
 .idea/
+
+env.yaml

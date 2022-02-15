@@ -2,8 +2,8 @@ import urllib.request as urllib2
 from bs4 import BeautifulSoup
 import pandas as pd
 import datetime as dt
-# from src.data.job_offers.remote_ok.common import config
-from common import config
+from src.data.job_offers.remote_ok.common import config
+# from common import config
 
 
 class NewOffer:
