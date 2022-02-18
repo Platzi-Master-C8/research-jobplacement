@@ -1,0 +1,20 @@
+job_sites:
+  weworkremotely:
+    url: https://weworkremotely.com
+    queries:
+      homepage_category_links: 'section.jobs > article > h2'
+      jobs_by_category_links: 'section.jobs > article > ul > li.feature > a'
+      job_url: 'og:url'
+      job_title: '.listing-header-container h1'
+      job_company: '.company-card h2 a'
+      job_public_day: '.listing-header-container > h3 > time'
+      list_with_jobtype_category_jobplace: 'a > span.listing-tag'
+      jobdescription: 'listing-container'
+  remoteok:
+    url: https://remoteok.com
+    queries:
+      homepage_article_links: '.field-content a'
+  getonboard:
+    url: https://getonboard.com
+    queries:
+      homepage_article_links: ''
