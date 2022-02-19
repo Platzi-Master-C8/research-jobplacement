@@ -1,1 +1,1 @@
-from .comparably.pipeline import ComparablyPipeline
+from .indeed.pipeline import IndeedPipeline

@@ -4,14 +4,16 @@ import logging
 # Scrappers
 from data.job_offers import (
     GetOnBoardPipeline,
+    WeWorkRemotelyPipeline,
 )
 from data.reviews import (
-    ComparablyPipeline,
+    IndeedPipeline,
 )
 from data.job_offers.remote_ok.remoteok_pipeline import (
     RemoteokPipeline,
-
 )
+
+from data.companies import CompaniesGetOnBoardPipeline
 
 # Utils
 from utils.interface import PipelineInterface
@@ -23,7 +25,9 @@ logger = logging.getLogger(__name__)
 def main():
     pipelines = [
         GetOnBoardPipeline(),
-        ComparablyPipeline(),
+        IndeedPipeline(),
+        CompaniesGetOnBoardPipeline(),
+        WeWorkRemotelyPipeline(),
         RemoteokPipeline(),
     ]
     for pipeline in pipelines:
