@@ -24,6 +24,7 @@ class Load():
                                              self.con)
         self.locations = self.insert_location(self.data['Location'].drop_duplicates(),
                                               self.con)
+                                              
         self.ins, self.position = self.insert_data(self.data, self.categories,
                                                    self.companies, self.locations,
                                                    self.con)
@@ -145,12 +146,16 @@ class Load():
                 loc_nm[x], loc_id[x])
 
         # REORDENAMIENTO Y RENOMBRAMIENTO DE COLUMNAS
-        df = df[['Position', 'categories', 'seniority',
+        df = df[
+                [
+                'Position', 'categories', 'seniority',
                 'Description', 'modality', 'Date_published',
-                 'activate', 'num_offers', 'MIN_SALARY',
-                 'MAX_SALARY', 'MIDPOINT_SALARY', 'CURRENCY',
-                 'remote', 'Location', 'english', 'english_level',
-                 'URL', 'Company', 'SKILLS']]
+                'activate', 'num_offers', 'MIN_SALARY',
+                'MAX_SALARY', 'MIDPOINT_SALARY', 'CURRENCY',
+                'remote', 'Location', 'english', 'english_level',
+                'URL', 'Company', 'SKILLS'
+                ]
+        ]
 
         names = ['position_title', 'position_category_id',
                  'seniority_id', 'description', 'modality',

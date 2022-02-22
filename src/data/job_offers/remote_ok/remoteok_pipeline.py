@@ -11,9 +11,9 @@ class RemoteokPipeline(PipelineInterface):
         self.execute
 
     def execute(self):
-        self.extract()
+        # self.extract()
         self.transform()
-        self.load()
+        # self.load()
 
     def extract(self):
         ro_ex.NewOffer()
