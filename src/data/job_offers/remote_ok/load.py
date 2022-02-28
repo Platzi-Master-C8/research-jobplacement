@@ -15,13 +15,15 @@ pd.set_option('display.max_columns', 500)
 class Load():
     def __init__(self) -> None:
         self.today = dt.date.today()
-        self.route = f'./data/processed/REMOTEOK_{self.today}_offers_CLEAN.csv'
+        # self.route = f'./data/processed/REMOTEOK_{self.today}_offers_CLEAN.csv'
+        self.route = f'./data/processed/REMOTEOK_2022-02-22_offers_CLEAN.csv'
         self.data = self.read_file(self.route)
         self.con = pc.connection_elephant()
         self.categories = self.insert_category(self.data["categories"].drop_duplicates(),
                                                self.con)
         self.companies = self.insert_company(self.data['Company'].drop_duplicates(),
                                              self.con)
+        
         self.locations = self.insert_location(self.data['Location'].drop_duplicates(),
                                               self.con)
                                               
@@ -131,11 +133,11 @@ class Load():
         cat_nm = list(categories['category'])
         loc_id = list(locations['id_location'])
         loc_nm = list(locations['country'])
-
+        df['Company'] = df['Company'].str.upper()
         # REMPLAZO DE NOMBRES POR IDS
         for x in range(len(comp_id)):
             df['Company'] = df['Company'].replace(
-                comp_nm[x], comp_id[x])
+                comp_nm[x].upper(), comp_id[x])
 
         for x in range(len(cat_id)):
             df['categories'] = df['categories'].replace(
@@ -153,7 +155,7 @@ class Load():
                 'activate', 'num_offers', 'MIN_SALARY',
                 'MAX_SALARY', 'MIDPOINT_SALARY', 'CURRENCY',
                 'remote', 'Location', 'english', 'english_level',
-                'URL', 'Company', 'SKILLS'
+                'URL', 'Company', 'SKILLS','uid'
                 ]
         ]
 
@@ -163,35 +165,75 @@ class Load():
                  'salary_min', 'salary_max', 'salary',
                  'currency_id', 'remote', 'location_id',
                  'english', 'english_level', 'position_url',
-                 'company_id', 'skill']
+                 'company_id', 'skill','uid']
 
         df.columns = names
         df['date_position'] = df['date_position'].str[:-6:]
         df2 = df.copy()
         df = df.drop(['skill'], axis=1)
 
-
         registered = self.get_data('position', con).drop(
             ['id_position', 'uid'], axis=1)
 
         registered['date_position'] = registered['date_position'].astype('str')
-        # registered['activate'] = registered['activate'].astype('str')
-        # registered['english'] = registered['english'].astype('str')
         registered['remote'] = registered['remote'].astype('str')
         registered['salary'] = registered['salary'].astype('float64')
         
-        reg = list(registered['position_url'])
-        dfs = list(df['position_url'])
-        new_cats = pd.DataFrame(
-            {'position_url': list(set(dfs) - set(reg))})
-        news = df[df['position_url'].isin(new_cats['position_url'])]
-        news = news.drop_duplicates()
+        df['key'] = (df['position_title'].astype('str') +
+            df['position_category_id'].astype('str') +
+            df['seniority_id'].astype('str') +
+            df['modality'].astype('str') +
+            df['date_position'].astype('str') +
+            df['activate'].astype('str') +
+            df['num_offers'].astype('str') +
+            df['salary_min'].astype('str') +
+            df['salary_max'].astype('str') +
+            df['salary'].astype('str') +
+            df['currency_id'].astype('str') +
+            df['remote'].astype('str') +
+            df['location_id'].astype('str') +
+            df['english'].astype('str') +
+            df['english_level'].astype('str') +
+            df['position_url'].astype('str') +
+            df['company_id'].astype('str'))
+        
+        registered['key'] = (registered['position_title'].astype('str') +
+            registered['position_category_id'].astype('str') +
+            registered['seniority_id'].astype('str') +
+            registered['modality'].astype('str') +
+            registered['date_position'].astype('str') +
+            registered['activate'].astype('str') +
+            registered['num_offers'].astype('str') +
+            registered['salary_min'].astype('str') +
+            registered['salary_max'].astype('str') +
+            registered['salary'].astype('str') +
+            registered['currency_id'].astype('str') +
+            registered['remote'].astype('str') +
+            registered['location_id'].astype('str') +
+            registered['english'].astype('str') +
+            registered['english_level'].astype('str') +
+            registered['position_url'].astype('str') +
+            registered['company_id'].astype('str') )
 
+        reg = list(registered['key'])
+        dfs = list(df['key'])
+        new_cats = list(
+            list(set(dfs) - set(reg)))
+
+        news = pd.DataFrame()
+        for cat in (new_cats):
+            # val = pd.DataFrame()
+            news = pd.concat([news, df[df['key']== cat]])
+        
+        news = news.drop_duplicates()
+        
         if news.empty:
             print('No existen registros nuevos para position')
         else:
+            
+            news = news.drop(['key'], axis=1)
             conn = con
-            df.to_sql('position', con=conn,
+            news.to_sql('position', con=conn,
                       if_exists='append',
                       index=False)
             print(f'Se cargaron : {len(news)} registros a Position')
@@ -272,10 +314,10 @@ class Load():
         reg = list(registered['key'])
         dfs = list(df2['key'])
 
-        new_cats = pd.DataFrame(
-            {'key': list(set(dfs) - set(reg))})
+        new_cats = list(
+            list(set(dfs) - set(reg)))
 
-        news = df2[df2['key'].isin(new_cats['key'])]
+        news = df2[df2['key'].isin(new_cats)]
         news = news.drop(['key'], axis = 1)
                 
         news = news.fillna(1)

@@ -1,17 +1,18 @@
 # Logger
 import logging
 
-# # Scrappers
-# from data.job_offers import (
-#     GetOnBoardPipeline,
-# )
+# Scrappers
+from data.job_offers import (
+    # GetOnBoardPipeline,
+    RemoteokPipeline,
+)
 # from data.reviews import (
 #     ComparablyPipeline,
 # )
-from data.job_offers.remote_ok.remoteok_pipeline import (
-    RemoteokPipeline,
+# from data.job_offers.remote_ok.remoteok_pipeline import (
+#     RemoteokPipeline,
 
-)
+# )
 
 # Utils
 from utils.interface import PipelineInterface

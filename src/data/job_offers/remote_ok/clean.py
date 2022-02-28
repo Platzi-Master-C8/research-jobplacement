@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import datetime as dt
 import re
+import hashlib
 
 
 class Clean():
@@ -140,7 +141,7 @@ class Clean():
 
             df['Location'] = df['Location'].str.strip()
             
-            df['categories'] = np.select(conditions, choices,'')
+            df['categories'] = np.select(conditions, choices,'-')
             # df = df.drop_duplicates()
             #USD = 3
 
@@ -151,6 +152,13 @@ class Clean():
             df[['num_offers']] = 1
             df = df.drop_duplicates()
             df = df[~df['SKILLS'].str.contains('exec')]
+
+            uids = (df
+                    .apply(lambda row : hashlib.md5(bytes(row['URL'].encode())), axis=1)
+                    .apply(lambda hash_object : hash_object.hexdigest())
+                    )
+            df['uid'] = uids
+
             df = self.location_unify(df)
 
             df.to_csv(f'./data/processed/REMOTEOK_{today}_offers_CLEAN.csv',
