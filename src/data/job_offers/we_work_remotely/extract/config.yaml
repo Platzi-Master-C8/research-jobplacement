@@ -10,11 +10,3 @@ job_sites:
       job_public_day: '.listing-header-container > h3 > time'
       list_with_jobtype_category_jobplace: 'a > span.listing-tag'
       jobdescription: 'listing-container'
-  remoteok:
-    url: https://remoteok.com
-    queries:
-      homepage_article_links: '.field-content a'
-  getonboard:
-    url: https://getonboard.com
-    queries:
-      homepage_article_links: ''

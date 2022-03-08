@@ -324,3 +324,5 @@ cython_debug/
 .idea/
 
 env.yaml
+
+*.csv

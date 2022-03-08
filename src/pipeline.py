@@ -5,14 +5,11 @@ import logging
 from data.job_offers import (
     GetOnBoardPipeline,
     WeWorkRemotelyPipeline,
+    RemoteokPipeline
 )
 from data.reviews import (
     IndeedPipeline,
 )
-from data.job_offers.remote_ok.remoteok_pipeline import (
-    RemoteokPipeline,
-)
-
 from data.companies import CompaniesGetOnBoardPipeline
 
 # Utils
@@ -23,10 +20,17 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    """
+    Main function of the pipeline.
+
+    It will run all the scrapers and save the data in the database.
+
+    Each scraper will be run in a separate thread and has an independent logic.
+    """
     pipelines = [
         GetOnBoardPipeline(),
-        IndeedPipeline(),
         CompaniesGetOnBoardPipeline(),
+        IndeedPipeline(),
         WeWorkRemotelyPipeline(),
         RemoteokPipeline(),
     ]

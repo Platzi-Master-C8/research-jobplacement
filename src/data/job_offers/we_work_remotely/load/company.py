@@ -1,13 +1,22 @@
+# SqlAlchemy
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Integer, Text, Boolean, Float
-from sqlalchemy.sql.expression import desc
-from company_location import CompanyLocation
-from location import Location
+from sqlalchemy import (
+    Column,
+    String,
+    Integer,
+    Text,
+    Boolean,
+    Float
+)
 
+# Base SqlAlchemy
 from base import Base
 
+
 class Company(Base):
+    """
+    Company table
+    """
     __tablename__ = 'company'
     id_company = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=False)
@@ -21,26 +30,22 @@ class Company(Base):
     website = Column(String(150), nullable=True)
     culture_score = Column(Float, nullable=True)
     work_life_balance = Column(Float, nullable=True)
-    stress_level =  Column(Float, nullable=True)
+    stress_level = Column(Float, nullable=True)
     company_location = relationship('Location', secondary='company_location')
 
-
     def __init__(self,
-                #ads_uid,
-                name,
-                description,
-                company_premium,
-                company_size,
-                ceo,
-                avg_reputation,
-                total_ratings,
-                ceo_score,
-                website,
-                culture_score,
-                work_life_balance,
-                stress_level):
-
-        #self.id = ads_uid
+                 name,
+                 description,
+                 company_premium,
+                 company_size,
+                 ceo,
+                 avg_reputation,
+                 total_ratings,
+                 ceo_score,
+                 website,
+                 culture_score,
+                 work_life_balance,
+                 stress_level):
         self.name = name
         self.description = description
         self.company_premium = company_premium
@@ -53,4 +58,3 @@ class Company(Base):
         self.culture_score = culture_score
         self.work_life_balance = work_life_balance
         self.stress_level = stress_level
-

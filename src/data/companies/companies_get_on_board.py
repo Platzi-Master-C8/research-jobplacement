@@ -106,6 +106,7 @@ class CompaniesGetOnBoardPipeline(PipelineInterface):
 
         # Extract text from html
         df_data[['attributes.projects']] = df_data[['attributes.projects']].applymap(extract_text_from_html)
+        df_data['company_premium'] = 'false'
 
         # Rename columns
         df_data.rename(columns=columns_to_rename, inplace=True)

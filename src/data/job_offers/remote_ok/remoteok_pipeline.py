@@ -1,14 +1,20 @@
-
-# from abc import abstractmethod
+# Logger
+import logging
+# Pipeline and Data
 import data.job_offers.remote_ok.new_offers as ro_ex
 import data.job_offers.remote_ok.clean as ro_tr
 import data.job_offers.remote_ok.load as ro_lo
 
+# Utils
 from utils.interface import PipelineInterface
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 class RemoteokPipeline(PipelineInterface):
     def __init__(self):
-        self.execute
+        pass
 
     def execute(self):
         self.extract()
@@ -16,15 +22,13 @@ class RemoteokPipeline(PipelineInterface):
         self.load()
 
     def extract(self):
+        logger.info("Extracting new remoteok offers")
         ro_ex.NewOffer()
 
     def transform(self):
+        logger.info("Cleaning remoteok offers")
         ro_tr.Clean()
 
     def load(self):
+        logger.info("Loading remoteok offers")
         ro_lo.Load()
-
-
-
-if __name__ == '__main__':
-    a = RemoteokPipeline()

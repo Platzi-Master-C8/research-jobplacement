@@ -11,7 +11,7 @@ def connect_to_db():
     """
     Connect to the database and return the connection
     """
-    return create_engine(DATABASE_URI, echo=True)
+    return create_engine(DATABASE_URI, echo=False)
 
 
 def create_tables(connection_db):

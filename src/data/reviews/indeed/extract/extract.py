@@ -1,14 +1,9 @@
 # Python
 import os
-
-# Pandas
 from datetime import datetime
 
+# Pandas
 import pandas as pd
-
-# asyncio
-import asyncio
-import nest_asyncio
 
 # PyYaml
 import yaml
@@ -18,7 +13,6 @@ from pyppeteer import launch
 
 # Utils
 from pyppeteer.errors import ElementHandleError, NetworkError
-
 from utils.db_connector import connect_to_db
 from utils.files import save_data
 
@@ -69,29 +63,41 @@ class IndeedWebScraping:
         """ Returns a list of companies to search """
         engine = connect_to_db()
         df_companies_to_search = pd.read_sql_query(
-            'SELECT id_company, name FROM company WHERE death_line IS NULL LIMIT 10', engine)
+            'SELECT id_company, name FROM company WHERE death_line IS NULL LIMIT 500', engine)
         self.companies_to_search = df_companies_to_search.to_dict('records')
 
     async def search_data(self):
         """ Searches the data """
         companies_info = []
-        companies_reviews = {}
+        companies_reviews = pd.DataFrame()
         self.browser = await self.get_browser()
         self.page = await self.browser.newPage()
         self.get_companies_to_search()
         for company in self.companies_to_search:
+            default_company_info = {
+                'name': company.get('name'),
+                'avg_reputation': 0,
+                'total_ratings': 0,
+                'death_line': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'culture_score': 0,
+                'work_life_balance_score': 0,
+                'career_opportunities_score': 0,
+                'perks_score': 0,
+            }
             await self.page.goto(self.url)
             try:
                 await self.search_company(company.get('name'))
-                await self.page.waitFor(3000)
                 companies_info.append(await self.get_company_info())
                 reviews = await self.get_company_reviews(company.get('id_company'))
-                companies_reviews = {**companies_reviews, **reviews}
+                companies_reviews = pd.concat([companies_reviews, reviews])
             except ElementHandleError as e:
+                companies_info.append(default_company_info)
+                print(e)
                 print(f'ElementHandleError: {company.get("name")}')
                 continue
             except NetworkError:
                 print(f'NetworkError: {company.get("name")}')
+                companies_info.append(default_company_info)
                 continue
         await self.close_browser()
         return companies_info, companies_reviews
@@ -103,12 +109,10 @@ class IndeedWebScraping:
         # Search the company name in the search bar
         await self.page.type(properties_yml['input_search'], company_name)
         await self.page.click(properties_yml['button_search'])
-        await self.page.waitFor(3000)
-
+        await self.page.waitFor(1000)
         # Click on the first company in the list
         company_url = await self._page_evaluate(query=properties_yml['first_result'])
-        await self.page.goto(f'{company_url}/reviews')
-        await self.page.waitFor(3000)
+        await self.page.goto(f'{company_url}')
 
     async def get_company_info(self):
         """
@@ -141,10 +145,10 @@ class IndeedWebScraping:
 
         # Get the reviews from the page and save them in a list
         reviews_length = await self._page_evaluate(query=properties_yml['reviews'])
-        reviews = {}
         reviewElement = 'document.getElementsByClassName("css-5cqmw8")'
 
         # Iterate over the reviews and get the info of each one of them
+        df_reviews = pd.DataFrame()
         for i in range(reviews_length):
             review_title = await self._page_evaluate(
                 query=f'{reviewElement}[{i}].{properties_yml["review_title"]}'
@@ -168,20 +172,15 @@ class IndeedWebScraping:
                 'content_type': content_type,
                 'review_score': review_score,
             }
-            reviews[i] = review
+            df_review_temp = pd.DataFrame(review, index=[0])
+            df_reviews = pd.concat([df_reviews, df_review_temp])
 
-        return reviews
+        return df_reviews
 
 
 async def extract_data():
     scraping_indeed = IndeedWebScraping()
     companies_info, companies_reviews = await scraping_indeed.search_data()
     df_companie_info = pd.DataFrame(companies_info)
-    df_company_reviews = pd.DataFrame(companies_reviews)
     save_data(df_companie_info, 'indeed_companies_info.csv', 'raw')
-    save_data(df_company_reviews, 'indeed_companies_reviews.csv', 'raw')
-
-
-if __name__ == '__main__':
-    nest_asyncio.apply()
-    x = asyncio.get_event_loop().run_until_complete(extract_data())
+    save_data(companies_reviews, 'indeed_companies_reviews.csv', 'raw')

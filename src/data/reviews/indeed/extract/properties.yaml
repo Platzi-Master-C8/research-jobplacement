@@ -1,9 +1,9 @@
 indeed_properties:
   url: 'https://www.indeed.com/companies'
   queries:
-    input_search: '#ifl-InputFormField-1'
-    button_search: '#main > div > div.css-f23u8d-Box.eu4oa1w0 > form > div > div.css-1puy0jg-Box.eu4oa1w0 > button'
-    first_result: 'document.getElementsByTagName("main")[0].children[0].children[1].children[0].children[2].children[0].children[0].children[1].children[0].children[0].href'
+    input_search: '#ifl-InputFormField-3'
+    button_search: '#main > div > div.css-6ve13f.eu4oa1w0 > form > div > div.css-1fv2pee.eu4oa1w0 > button'
+    first_result: 'document.getElementsByTagName("main")[0].children[0].children[1].children[0].children[2].children[1].children[0].children[0].children[0].href'
     company_name: 'document.getElementsByTagName("header")[0].children[1].children[2].children[0].children[0].children[0].children[0].children[0].children[1].children[0].innerText'
     company_overall: 'document.getElementsByTagName("header")[0].children[1].children[2].children[0].children[0].children[0].children[0].children[0].children[1].children[1].children[0].children[1].innerText'
     total_ratings: 'document.getElementsByTagName("header")[0].children[1].children[2].children[0].children[0].children[0].children[0].children[0].children[1].children[1].children[0].children[3].content'

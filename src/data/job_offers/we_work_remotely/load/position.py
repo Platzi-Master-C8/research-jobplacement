@@ -1,15 +1,23 @@
-from datetime import date
+# SqlAlchemy
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Integer, DateTime, Boolean, Text, ForeignKey, Float
-from sqlalchemy.sql.expression import true
-from seniority import Seniority
-from skill import Skill
-from position_skill import PositionSkill
+from sqlalchemy import (
+    Column,
+    String,
+    Integer,
+    DateTime,
+    Boolean,
+    Text,
+    ForeignKey
+)
 
+# Base SqlAlchemy
 from base import Base
 
+
 class Position(Base):
+    """
+    Position table
+    """
     __tablename__ = 'position'
 
     id_position = Column(Integer, primary_key=True, autoincrement=True)
@@ -38,28 +46,27 @@ class Position(Base):
     position_company = relationship('Company')
     position_skill = relationship('Skill', secondary='position_skill')
     uid = Column(Text, nullable=True)
-    
-    def __init__(self,
-                position_title,
-                position_category_id,
-                seniority_id,
-                description,
-                modality,
-                date_position,
-                activate,
-                num_offers,
-                salary_min,
-                salary_max,
-                salary,
-                currency_id,
-                remote,
-                location_id,
-                english,
-                english_level,
-                position_url,
-                company_id,
-                uid):
 
+    def __init__(self,
+                 position_title,
+                 position_category_id,
+                 seniority_id,
+                 description,
+                 modality,
+                 date_position,
+                 activate,
+                 num_offers,
+                 salary_min,
+                 salary_max,
+                 salary,
+                 currency_id,
+                 remote,
+                 location_id,
+                 english,
+                 english_level,
+                 position_url,
+                 company_id,
+                 uid):
         self.position_title = position_title
         self.position_category_id = position_category_id
         self.seniority_id = seniority_id
@@ -79,4 +86,3 @@ class Position(Base):
         self.position_url = position_url
         self.company_id = company_id
         self.uid = uid
-

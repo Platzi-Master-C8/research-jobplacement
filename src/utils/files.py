@@ -50,7 +50,7 @@ def save_data(df: DataFrame, file_name: str, df_type: str) -> None:
     :param df_type: Type of dataframe to save
     :return: None
     """
-    path = ''
+    path = None
     if df_type == 'raw':
         path = os.path.abspath(f'{DIR_RAW_DATA}/{file_name}')
 
