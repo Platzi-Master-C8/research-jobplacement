@@ -7,6 +7,9 @@ from bs4 import BeautifulSoup
 
 
 def transform():
+    """
+    Transform Indeed data to a more usable format for the model.
+    """
     df = read_data('indeed_companies_reviews.csv', 'raw')
     df['user_info'] = df['user_info'].apply(get_text_from_html)
 
@@ -19,11 +22,17 @@ def transform():
 
 
 def get_text_from_html(data):
+    """
+    Get text from html. This is used to get the position and the employee status.
+    """
     soup = BeautifulSoup(data, 'html.parser')
     return soup.get_text().split('-')
 
 
 def get_review_date(data):
+    """
+    Get the review date. This is used to get the review date.
+    """
     try:
         return datetime.strptime(data[2], ' %B %d, %Y').strftime('%Y-%m-%d')
     except ValueError:

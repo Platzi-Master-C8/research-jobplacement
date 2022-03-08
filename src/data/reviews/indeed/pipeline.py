@@ -19,11 +19,21 @@ logger = logging.getLogger(__name__)
 
 
 class IndeedPipeline(PipelineInterface):
+    """
+    Class to process Indeed data and store it in a database. The pipeline is composed of the following steps:
+
+    1. Extract data from the source
+    2. Transform data
+    3. Store data in a database
+    """
 
     def __init__(self):
         self.connection = connect_to_db()
 
     def execute(self):
+        """
+        Execute the pipeline to extract, transform and load data into the database
+        """
         self.extract()
         self.transform()
         self.load()

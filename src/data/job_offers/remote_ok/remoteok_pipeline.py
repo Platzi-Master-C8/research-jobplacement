@@ -17,18 +17,30 @@ class RemoteokPipeline(PipelineInterface):
         pass
 
     def execute(self):
+        """
+        Execute the pipeline in order to extract, clean and load the data
+        """
         self.extract()
         self.transform()
         self.load()
 
     def extract(self):
+        """
+        Extract the data from remoteok website and save it in csv files
+        """
         logger.info("Extracting new remoteok offers")
         ro_ex.NewOffer()
 
     def transform(self):
+        """
+        Clean the data and save it in the database (if needed) and load it
+        """
         logger.info("Cleaning remoteok offers")
         ro_tr.Clean()
 
     def load(self):
+        """
+        Load the data in the database (if needed) and save it in csv files
+        """
         logger.info("Loading remoteok offers")
         ro_lo.Load()

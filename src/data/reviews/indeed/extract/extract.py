@@ -48,11 +48,15 @@ class IndeedWebScraping:
             {'devtools': True, 'ignoreHTTPSErrors': True, 'defaultViewport': {'width': 1920, 'height': 1080}})
 
     async def close_browser(self):
-        """ Closes the browser instance """
+        """
+        Closes the browser instance and saves the data
+        """
         return await self.browser.close()
 
     async def _page_evaluate(self, query: str):
-        """ Evaluates the query in the page """
+        """
+        Evaluates the query in the page and returns the result as a string
+        """
         query_result = await self.page.evaluate(
             pageFunction=query,
             force_expr=True
@@ -60,14 +64,18 @@ class IndeedWebScraping:
         return query_result
 
     def get_companies_to_search(self):
-        """ Returns a list of companies to search """
+        """
+        Returns a list of companies to search in Indeed.com based on the data in the database
+        """
         engine = connect_to_db()
         df_companies_to_search = pd.read_sql_query(
             'SELECT id_company, name FROM company WHERE death_line IS NULL LIMIT 500', engine)
         self.companies_to_search = df_companies_to_search.to_dict('records')
 
     async def search_data(self):
-        """ Searches the data """
+        """
+        Searches the data for each company in the companies_to_search list and saves it in the database
+        """
         companies_info = []
         companies_reviews = pd.DataFrame()
         self.browser = await self.get_browser()
@@ -92,7 +100,6 @@ class IndeedWebScraping:
                 companies_reviews = pd.concat([companies_reviews, reviews])
             except ElementHandleError as e:
                 companies_info.append(default_company_info)
-                print(e)
                 print(f'ElementHandleError: {company.get("name")}')
                 continue
             except NetworkError:
@@ -103,20 +110,23 @@ class IndeedWebScraping:
         return companies_info, companies_reviews
 
     async def search_company(self, company_name: str):
-        """ Searches a company """
+        """
+        Searches a company in the page and clicks on the first result
+        """
         properties_yml = self.properties_yml
 
         # Search the company name in the search bar
         await self.page.type(properties_yml['input_search'], company_name)
         await self.page.click(properties_yml['button_search'])
         await self.page.waitFor(1000)
+
         # Click on the first company in the list
         company_url = await self._page_evaluate(query=properties_yml['first_result'])
         await self.page.goto(f'{company_url}')
 
     async def get_company_info(self):
         """
-        Returns the company information as a dictionary
+        Returns the company information as a dictionary from the page data
         """
         properties_yml = self.properties_yml
 
@@ -140,7 +150,9 @@ class IndeedWebScraping:
         }
 
     async def get_company_reviews(self, company_id: int):
-        """ Gets the reviews of a company """
+        """
+        Gets the reviews of a company from the page data and returns it as a pandas dataframe
+        """
         properties_yml = self.properties_yml
 
         # Get the reviews from the page and save them in a list
@@ -179,6 +191,9 @@ class IndeedWebScraping:
 
 
 async def extract_data():
+    """
+    Extracts the data from the page and returns it as a pandas dataframe
+    """
     scraping_indeed = IndeedWebScraping()
     companies_info, companies_reviews = await scraping_indeed.search_data()
     df_companie_info = pd.DataFrame(companies_info)

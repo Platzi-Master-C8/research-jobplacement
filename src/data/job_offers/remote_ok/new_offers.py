@@ -19,10 +19,8 @@ from utils.files import save_data
 # Logging
 import logging
 
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
 
 
 class NewOffer:

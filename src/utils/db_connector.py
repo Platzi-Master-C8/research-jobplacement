@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 # Models
 from models import Base
 
-DATABASE_URI = 'postgresql://dywapbyl:baCNBzlMNccJ69at2VTQ4l8YIPD3xo_w@castor.db.elephantsql.com/dywapbyl'
+DATABASE_URI = ''
 
 
 def connect_to_db():

@@ -326,3 +326,7 @@ cython_debug/
 env.yaml
 
 *.csv
+
+*.xlsx
+
+*.png
